@@ -23,6 +23,9 @@ public class DestroyByContact : MonoBehaviour {
 		if (other.tag == "Boundary" || other.tag == "Enemy"){
 			return;
 			}
+		if (other.tag == "Bolt" && scoreValue == 0) {
+			return;
+		}
 		if (other.tag == "Player") {
 			Instantiate (playerExplosion, other.transform.position, other.transform.rotation);
 			gameController.GameOver ();
