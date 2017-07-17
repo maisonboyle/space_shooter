@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour {
 	public Text scoreText;
 	public GameObject restartButton;
 	public Text gameOverText;
+	public Text highScoreText;
 
 	private bool gameOver;
 	private bool restart;
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour {
 	private float modifier = 0.0f;
 	private float challenge;
 	private GameObject hazard;
+	private int highScore;
 
 	IEnumerator SpawnWaves (){
 		yield return new WaitForSeconds (startWait);
@@ -58,6 +60,8 @@ public class GameController : MonoBehaviour {
 
 	void Start(){
 		score = 0;
+		highScore = PlayerPrefs.GetInt ("Highscore");
+		highScoreText.text = "Highscore: " + highScore;
 		gameOver = false;
 		restart = false;
 		restartButton.SetActive (false);
@@ -78,6 +82,11 @@ public class GameController : MonoBehaviour {
 			
 	void UpdateScore(){
 		scoreText.text = "Score: " + score;
+		if (score > highScore && gameOver) {
+			highScore = score;
+			highScoreText.text = "Highscore: " + highScore;
+			PlayerPrefs.SetInt ("Highscore", highScore);
+		}
 	}
 
 	public void RestartGame(){
