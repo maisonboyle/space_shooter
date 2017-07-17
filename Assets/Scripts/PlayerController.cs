@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour {
 	public GameObject shot;
 	public Transform shotSpawn;
 	public float fireDelay;
+	public SimpleTouchPad touchPad;
+	public SimpleFireArea fireArea;
+
 	private float nextFire = 0.0f;
 	private AudioSource audioSource;
 	private Quaternion calibrationQuaternion;
@@ -48,9 +51,12 @@ public class PlayerController : MonoBehaviour {
 //		float moveVertical = Input.GetAxis ("Vertical");
 //		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 
-		Vector3 accelerationRaw = Input.acceleration;
-		Vector3 acceleration = FixAccelleration (accelerationRaw);
-		Vector3 movement = new Vector3 (acceleration.x, 0.0f, acceleration.y);
+//		Vector3 accelerationRaw = Input.acceleration;
+//		Vector3 acceleration = FixAccelleration (accelerationRaw);
+//		Vector3 movement = new Vector3 (acceleration.x, 0.0f, acceleration.y);
+
+		Vector2 direction = touchPad.GetDirection ();
+		Vector3 movement = new Vector3 (direction.x, 0.0f, direction.y);
 		rb.velocity = movement * speed;
 
 		rb.position = new Vector3 (
@@ -63,7 +69,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update(){
-		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+		if (fireArea.CanFire() && Time.time > nextFire) {
 			nextFire = Time.time + fireDelay;
 			Instantiate (shot, shotSpawn.position, shotSpawn.rotation);
 			audioSource.Play ();

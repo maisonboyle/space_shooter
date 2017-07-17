@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -12,9 +13,9 @@ public class GameController : MonoBehaviour {
 	public float startWait;
 	public float waveWait;
 
-	public GUIText scoreText;
-	public GUIText restartText;
-	public GUIText gameOverText;
+	public Text scoreText;
+	public GameObject restartButton;
+	public Text gameOverText;
 
 	private bool gameOver;
 	private bool restart;
@@ -48,7 +49,7 @@ public class GameController : MonoBehaviour {
 			}
 			yield return new WaitForSeconds (waveWait);
 			if (gameOver) {
-				restartText.text = "Press 'R' to restart";
+				restartButton.SetActive (true);
 				restart = true;
 				break;
 			}
@@ -59,7 +60,7 @@ public class GameController : MonoBehaviour {
 		score = 0;
 		gameOver = false;
 		restart = false;
-		restartText.text = "";
+		restartButton.SetActive (false);
 		gameOverText.text = "";
 		UpdateScore ();
 		StartCoroutine( SpawnWaves ());
@@ -79,11 +80,15 @@ public class GameController : MonoBehaviour {
 		scoreText.text = "Score: " + score;
 	}
 
-	void Update(){
-		if (restart) {
-			if (Input.GetKeyDown (KeyCode.R)) {
-				SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
-			}
-		}
+	public void RestartGame(){
+		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
 	}
+
+//	void Update(){
+//		if (restart) {
+//			if (Input.GetKeyDown (KeyCode.R)) {
+//				SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+//			}
+//		}
+//	}
 }
